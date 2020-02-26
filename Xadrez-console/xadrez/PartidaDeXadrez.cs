@@ -1,13 +1,14 @@
 ﻿using System;
 using tabuleiro;
 using tabuleiro.Enums;
+using tabuleiro.Exception;
 
 namespace xadrez
 {
     class PartidaDeXadrez
     {
-        private int turno;
-        private Cor jogadorAtual;
+        public int turno { get; private set; }
+        public Cor jogadorAtual { get; private set; }
         public Tabuleiro Tab { get; private set; }
         public bool Terminada { get; private set; }
 
@@ -28,7 +29,50 @@ namespace xadrez
             Peca pecaCapturada = Tab.retirarPeca(destino);
             Tab.colocarPeca(p, destino);
         }
+
+        public void realizaJogada(Posicao origem, Posicao destino)
+        {
+            executaMovimento(origem, destino);
+            turno++;
+            mudaJogador();
+        }
         
+        public void validarPosicaoOrigem(Posicao pos)
+        {
+            if (Tab.peca(pos) == null)
+            {
+                throw new TabuleiroException("Não existe peça na posição de origem escolhida!");
+            }
+            if (jogadorAtual != Tab.peca(pos).Cor)
+            {
+                throw new TabuleiroException("A peça de origem escolhida não é sua!");
+            }
+            if (!Tab.peca(pos).existeMovimentosPossiveis())
+            {
+                throw new TabuleiroException("Não há movimentos possíveis para a peça de origem!");
+            }
+        }
+
+        public void validaPosicaoDeDestino(Posicao origem, Posicao destino)
+        {
+            if (!Tab.peca(origem).podeMoverPara(destino))
+            {
+                throw new TabuleiroException("Posição de destino inválida!");
+            }
+        }
+
+        private void mudaJogador()
+        {
+            if (jogadorAtual == Cor.Branca)
+            {
+                jogadorAtual = Cor.Preta;
+            }
+            else
+            {
+                jogadorAtual = Cor.Branca;
+            }
+        }
+
         private void colocarPecas()
         {
             Tab.colocarPeca(new Torre(Tab, tabuleiro.Enums.Cor.Branca), new PosicaoXadrez('c',1).toPosicao());
