@@ -18,7 +18,7 @@ namespace Xadrez_console
                     try
                     {
                         Console.Clear();
-                        Tela.imprimirPartida(partida);
+                        Tela.imprimePartida(partida);
 
                         Console.WriteLine();
                         Console.Write("Origem: ");
