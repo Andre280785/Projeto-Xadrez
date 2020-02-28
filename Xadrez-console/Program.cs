@@ -43,7 +43,8 @@ namespace Xadrez_console
                         Console.ReadLine();
                     }
                 }
-                
+                Console.Clear();
+                Tela.imprimePartida(partida);                
             }
             catch (TabuleiroException e)
             {
